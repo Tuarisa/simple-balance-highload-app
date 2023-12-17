@@ -1,5 +1,3 @@
-import userSchema from '../schema/userSchema.js';
-
 export const up = async ({ context: queryInterface }) => {
   await queryInterface.bulkInsert(
     'users',

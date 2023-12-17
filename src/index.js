@@ -5,7 +5,7 @@ import userRoutes from './routes/userRoutes.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const APP_PORT = process.env.APP_PORT
+const APP_PORT = process.env.APP_PORT;
 
 const app = express();
 app.use(bodyParser.json());

@@ -6,7 +6,7 @@ const updateUserBalance = async (req, res) => {
     const updatedBalance = await userService.updateUserBalance(userId, amount);
     res.send({ balance: updatedBalance });
   } catch (error) {
-    res.status(error.status || 500).send({error: error.message});
+    res.status(error.status || 500).send({ error: error.message });
   }
 };
 
