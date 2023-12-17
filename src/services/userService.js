@@ -16,7 +16,6 @@ const updateUserBalance = async (userId, amount) => {
       );
   }
 
-  // Проверка, была ли обновлена какая-либо строка
   if (updateResult[0] === 0) {
     if (amount < 0) {
       throw { status: 400, message: 'Insufficient balance' };
@@ -24,8 +23,6 @@ const updateUserBalance = async (userId, amount) => {
       throw { status: 404, message: 'User not found' };
     }
   }
-
-  // Получаем обновленный баланс
   const updatedUser = await User.findByPk(userId);
   return updatedUser.balance;
 };
