@@ -1,6 +1,6 @@
 const testUpdateBalance = async () => {
-  const userId = 1; // Предполагаем, что используется ID пользователя 1
-  const amount = -2; // Уменьшаем баланс на 2
+  const userId = 1;
+  const amount = -2;
   let successfulRequests = 0;
   let failedRequests = 0;
   const requests = [];
@@ -14,13 +14,13 @@ const testUpdateBalance = async () => {
       body: JSON.stringify({ userId, amount })
     }).then(response => {
       if (!response.ok) {
+        response.json().then(data => console.log(`Request ${i + 1}: Failed`, data));
         throw new Error(`Request ${i + 1} failed: ${response.statusText}`);
       }
       successfulRequests++;
       return response.json().then(data => console.log(`Request ${i + 1}: Success`, data));
-    }).catch(error => {
+    }).catch(() => {
       failedRequests++;
-      console.error(error.message);
     }));
   }
 

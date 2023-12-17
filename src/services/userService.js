@@ -5,16 +5,14 @@ const updateUserBalance = async (userId, amount) => {
   let updateResult;
 
   if (amount < 0) {
-    // Уменьшаем баланс, если новый баланс не станет отрицательным
     updateResult = await User.update(
       { balance: Sequelize.literal(`balance - ${Math.abs(amount)}`) },
       { where: { id: userId, balance: { [Sequelize.Op.gte]: Math.abs(amount) } } }
       );
   } else {
-    // Увеличиваем баланс
     updateResult = await User.update(
       { balance: Sequelize.literal(`balance + ${amount}`) },
-      { where: { id: userId } }
+      { where: { id: userId } } // No need to check the balance when it is increasing, assuming it will not exceed the max integer value
       );
   }
 
