@@ -31,7 +31,7 @@ fetch('http://localhost:3000/user/update-balance', {
   },
   body: JSON.stringify({
     userId: user_id_goes_here,
-    amount: positive_integer_amount_goes_here
+    amount: integer_amount_goes_here
   }),
 });
 ```
