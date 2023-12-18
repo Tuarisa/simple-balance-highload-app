@@ -9,9 +9,7 @@ const userSchema = {
   balance: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    validate: {
-      min: 0
-    }
+    defaultValue: 0
   }
 };
 
