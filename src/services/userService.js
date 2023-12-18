@@ -2,29 +2,29 @@ import User from '../models/user.js';
 import Sequelize from 'sequelize';
 
 const updateUserBalance = async (userId, amount) => {
-  let updateResult;
+  const operation = amount < 0 ? '-' : '+';
+  const absoluteAmount = Math.abs(amount);
+  const updateCondition = { where: { id: userId } };
 
   if (amount < 0) {
-    updateResult = await User.update(
-      { balance: Sequelize.literal(`balance - ${Math.abs(amount)}`) },
-      {
-        where: { id: userId, balance: { [Sequelize.Op.gte]: Math.abs(amount) } }
-      }
-    );
-  } else {
-    updateResult = await User.update(
-      { balance: Sequelize.literal(`balance + ${amount}`) },
-      { where: { id: userId } }
-    );
+    updateCondition.where.balance = { [Sequelize.Op.gte]: absoluteAmount };
   }
 
+  const updateResult = await User.update(
+    { balance: Sequelize.literal(`balance ${operation} ${absoluteAmount}`) },
+    updateCondition
+  );
+
+  let error;
   if (updateResult[0] === 0) {
     if (amount < 0) {
-      throw { status: 400, message: 'Insufficient balance' };
+      error = { status: 400, message: 'Insufficient balance' };
     } else {
-      throw { status: 404, message: 'User not found' };
+      error = { status: 404, message: 'User not found' };
     }
+    throw error;
   }
+
   const updatedUser = await User.findByPk(userId);
   return updatedUser.balance;
 };
