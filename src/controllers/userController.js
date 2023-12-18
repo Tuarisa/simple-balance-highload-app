@@ -1,8 +1,8 @@
 import userService from '../services/userService.js';
-import userValidator from '../validators/userValidator.js';
+import { updateUserBalanceSchema } from '../validators/userValidator.js';
 
 const updateUserBalance = async (req, res) => {
-  const { error } = userValidator.updateUserBalanceSchema.validate(req.body);
+  const { error } = updateUserBalanceSchema.validate(req.body);
   if (error) {
     return res.status(400).send({ error: error.details[0].message });
   }
