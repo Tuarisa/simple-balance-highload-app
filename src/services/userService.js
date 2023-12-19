@@ -2,7 +2,6 @@ import User from '../models/user.js';
 import Sequelize from 'sequelize';
 
 const updateUserBalance = async (userId, amount) => {
-  const operation = amount < 0 ? '-' : '+';
   const absoluteAmount = Math.abs(amount);
   const updateCondition = { where: { id: userId } };
 
@@ -10,13 +9,14 @@ const updateUserBalance = async (userId, amount) => {
     updateCondition.where.balance = { [Sequelize.Op.gte]: absoluteAmount };
   }
 
-  const updateResult = await User.update(
-    { balance: Sequelize.literal(`balance ${operation} ${absoluteAmount}`) },
+  const updateResult = await User.increment(
+    { balance: amount },
     updateCondition
   );
 
-  let error;
-  if (updateResult[0] === 0) {
+  const [[[updatedUser], affectedRows]] = updateResult;
+  if (affectedRows === 0) {
+    let error;
     if (amount < 0) {
       error = { status: 400, message: 'Insufficient balance' };
     } else {
@@ -25,7 +25,6 @@ const updateUserBalance = async (userId, amount) => {
     throw error;
   }
 
-  const updatedUser = await User.findByPk(userId);
   return updatedUser.balance;
 };
 
